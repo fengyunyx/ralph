@@ -80,6 +80,7 @@ class DataCenterAssetSerializer(DataCenterAssetSerializerBase):
     )
     _type = serializers.SerializerMethodField('get_type')
     management_ip = serializers.SerializerMethodField('get_management')
+    environment = serializers.SerializerMethodField('get_environmentname')
     orientation = serializers.SerializerMethodField('get_orientation_desc')
     url = serializers.CharField(source='get_absolute_url')
 
@@ -89,13 +90,16 @@ class DataCenterAssetSerializer(DataCenterAssetSerializerBase):
     def get_management(self, obj):
         return obj.management_ip or ''
 
+    def get_environmentname(self, obj):
+        return obj.service_env.environment.name or ''
+    
     class Meta:
         model = DataCenterAsset
         fields = (
             'id', 'model', 'category', 'height', 'front_layout',
             'back_layout', 'barcode', 'sn', 'position',
             'children', '_type', 'hostname', 'management_ip',
-            'orientation', 'service', 'remarks', 'url',
+            'orientation', 'service', 'environment', 'remarks', 'url',
         )
 
 
